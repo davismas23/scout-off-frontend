@@ -4,7 +4,8 @@
 # time, so they're passed as build ARGs (not just runtime env) — see
 # docker-compose.yml, which supplies values pointing at the mock RPC/API
 # services so the browser can reach them directly (mapped to localhost).
-FROM node:20-alpine AS deps
+ARG NODE_VERSION=24.11
+FROM node:${NODE_VERSION}-alpine AS deps
 
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -12,7 +13,7 @@ COPY package.json package-lock.json ./
 # directory in the build context, so that would otherwise fail the build.
 RUN CI=true npm ci
 
-FROM node:20-alpine AS build
+FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
@@ -43,7 +44,7 @@ ENV NEXT_PUBLIC_CONTRACT_ID=$NEXT_PUBLIC_CONTRACT_ID \
 
 RUN npm run build
 
-FROM node:20-alpine
+FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app
 ENV NODE_ENV=production

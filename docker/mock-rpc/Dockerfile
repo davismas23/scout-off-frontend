@@ -1,4 +1,5 @@
-FROM node:20-alpine
+ARG NODE_VERSION=24.11
+FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app
 

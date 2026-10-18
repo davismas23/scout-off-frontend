@@ -1,4 +1,5 @@
-FROM node:20-alpine AS build
+ARG NODE_VERSION=24.11
+FROM node:${NODE_VERSION}-alpine AS build
 
 WORKDIR /app
 
@@ -9,7 +10,7 @@ COPY tsconfig.json ./
 COPY src ./src
 RUN npm run build
 
-FROM node:20-alpine
+FROM node:${NODE_VERSION}-alpine
 
 WORKDIR /app
 ENV NODE_ENV=production
