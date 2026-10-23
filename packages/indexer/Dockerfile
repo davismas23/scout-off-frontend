@@ -1,5 +1,7 @@
-ARG NODE_VERSION=24.11
-FROM node:${NODE_VERSION}-alpine AS build
+# Pinned to node:24-alpine to match the frontend's runtime (.nvmrc is 24,
+# package.json requires node >=24). Issue #1520 — this had drifted to
+# node:20 while the project moved to 24.
+FROM node:24-alpine AS build
 
 WORKDIR /app
 
@@ -10,7 +12,7 @@ COPY tsconfig.json ./
 COPY src ./src
 RUN npm run build
 
-FROM node:${NODE_VERSION}-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 ENV NODE_ENV=production
